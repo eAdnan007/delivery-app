@@ -22,5 +22,5 @@ echo "==========\nProject is up\n==========\n"
 
 
 echo "\n\n\n\n==========\nRun tests\n==========\n"
-sudo docker-compose exec app vendor/bin/phpuni
+sudo docker-compose exec app vendor/bin/phpunit
 echo "==========\nUnit test complete\n==========\n"
