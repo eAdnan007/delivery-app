@@ -71,6 +71,10 @@ class OrderController extends Controller
 		    $order = Order::create([
 			    'distance' => $response_body->routes[0]->legs[0]->distance->value,
 			    'status' => 'UNASSIGNED',
+			    'origin_lat' => $coords['origin'][0],
+			    'origin_lon' => $coords['origin'][1],
+			    'destination_lat' => $coords['destination'][0],
+			    'destination_lon' => $coords['destination'][1],
 		    ]);
 
 

@@ -11,7 +11,7 @@ class Order extends Model
 	 *
 	 * We have set both fields as we will not be using user input directly.
 	 */
-    protected $fillable = ['distance', 'status'];
+    protected $fillable = ['distance', 'status', 'origin_lat', 'origin_lon', 'destination_lat', 'destination_lon'];
 
 	/**
 	 * @var array List of fields that should be public
