@@ -1,5 +1,3 @@
-https://i.imgur.com/cTxCynS.jpg
-
 # Delivery App
 It is a simple app to demonstrate a simple RESTful api with only index, create, update methods.
 It uses google maps directions api to find distance of an order's origin and destination.
