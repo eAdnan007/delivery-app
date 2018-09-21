@@ -17,7 +17,12 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return 'LIST';
+    	$take_items = Input::get('limit', 10);
+
+    	$skip_pages = Input::get('page', 1) - 1;
+    	$skip_items = $skip_pages * $take_items;
+
+        return Order::skip($skip_items)->take($take_items)->get();
     }
 
     /**

@@ -59,4 +59,20 @@ class OrderTest extends TestCase
         // Cleanup
         $order->delete();
     }
+
+    public function testIndex()
+    {
+    	$orders = factory('App\Order', 100)->create();
+
+	    $response = $this->json('GET', '/orders');
+
+	    $response->assertStatus(200)
+		         ->assertJsonStructure([
+		         	'*' => [
+		         		'id', 'status', 'distance'
+		            ]
+		         ]);
+
+	    Order::whereIn('id', $orders->pluck('id'))->delete();
+    }
 }

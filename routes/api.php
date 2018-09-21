@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('order', 'OrderController@store');
 Route::put('order/{order}', 'OrderController@update');
+Route::get('orders', 'OrderController@index');
