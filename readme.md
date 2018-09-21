@@ -5,8 +5,10 @@ It uses google maps directions api to find distance of an order's origin and des
 ## Installation & Running
 - Clone/Download the repository on a fresh ubuntu 18.04 x64
 - Go to the project directory and open **docker-compose.yml** file.
-- Add a new environment variable `GMAPS_API_KEY` under **services > app > environment** with the value as api key. (see screenshot for clarification) 
+- Add a new environment variable `GMAPS_API_KEY` under **services > app > environment** with the value as api key. (see screenshot for clarification)
+ 
 ![Adding API Key](https://i.imgur.com/cTxCynS.jpg)
+
 - Run setup.sh with sudo such as `sudo ./setup.sh`.
 - It will automatically run few unit tests at the end of installation.
 - If you want to run unit tests manually, you can do it by `docker-compose exec app vendor/bin/phpunit`
