@@ -1,59 +1,107 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+https://i.imgur.com/cTxCynS.jpg
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+# Delivery App
+It is a simple app to demonstrate a simple RESTful api with only index, create, update methods.
+It uses google maps directions api to find distance of an order's origin and destination.
 
-## About Laravel
+## Installation & Running
+- Clone/Download the repository on a fresh ubuntu 18.04 x64
+- Go to the project directory and open **docker-compose.yml** file.
+- Add a new environment variable `GMAPS_API_KEY` under **services > app > environment** with the value as api key. (see screenshot for clarification) 
+![Adding API Key](https://i.imgur.com/cTxCynS.jpg)
+- Run setup.sh with sudo such as `sudo ./setup.sh`.
+- It will automatically run few unit tests at the end of installation.
+- If you want to run unit tests manually, you can do it by `docker-compose exec app vendor/bin/phpunit`
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+The test file is located at **tests > Feature > OrderTest.php**.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Project Requirements
+This app features three api endpoints.
+- One endpoint to create an order (see sample)
+    - To create an order, the API client must provide an origin and a destination (see sample)
+    - The API responds an object containing the distance and the order ID (see sample)
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+- One endpoint to take an order (see sample)
+    - An order must not be takable multiple time.
+    - An error response should be sent if a client tries to take an order already taken.
 
-## Learning Laravel
+- One endpoint to list orders (see sample)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+## Samples
+### Place order
+  - Method: `POST`
+  - URL path: `/order`
+  - Request body:
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+    ```
+    {
+        "origin": ["START_LATITUDE", "START_LONGTITUDE"],
+        "destination": ["END_LATITUDE", "END_LONGTITUDE"]
+    }
+    ```
 
-## Laravel Sponsors
+  - Response:
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+    Header: `HTTP 200`
+    Body:
+      ```
+      {
+          "id": <order_id>,
+          "distance": <total_distance>,
+          "status": "UNASSIGN"
+      }
+      ```
+    or
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Pulse Storm](http://www.pulsestorm.net/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
+    Header: `HTTP 500`
+    Body:
+      ```json
+      {
+          "error": "ERROR_DESCRIPTION"
+      }
+      ```
 
-## Contributing
+### Take order
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+  - Method: `PUT`
+  - URL path: `/order/:id`
+  - Request body:
+    ```
+    {
+        "status":"taken"
+    }
+    ```
+  - Response:
+    Header: `HTTP 200`
+    Body:
+      ```
+      {
+          "status": "SUCCESS"
+      }
+      ```
+    or
 
-## Security Vulnerabilities
+    Header: `HTTP 409`
+    Body:
+      ```
+      {
+          "error": "ORDER_ALREADY_BEEN_TAKEN"
+      }
+      ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Order list
 
-## License
+  - Method: `GET`
+  - Url path: `/orders?page=:page&limit=:limit`
+  - Response:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+    ```
+    [
+        {
+            "id": <order_id>,
+            "distance": <total_distance>,
+            "status": <ORDER_STATUS>
+        },
+        ...
+    ]
+    ```
