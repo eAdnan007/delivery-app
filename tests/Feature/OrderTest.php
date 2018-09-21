@@ -26,8 +26,7 @@ class OrderTest extends TestCase
                  	 'id', 'status', 'distance'
                  ]);
 
-        $response->json('id');
-        Order::find('id')->delete();
+        Order::find($response->json('id'))->delete();
     }
 
     public function testTake()

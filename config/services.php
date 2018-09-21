@@ -35,4 +35,9 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+	'gmaps' => [
+		'api_key' => env('GMAPS_API_KEY'),
+		'endpoint' => 'https://maps.googleapis.com/maps/api/directions/json',
+	]
+
 ];
