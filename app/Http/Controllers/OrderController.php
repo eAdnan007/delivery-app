@@ -61,7 +61,10 @@ class OrderController extends Controller
 		    }
 
 		    $response_body = json_decode((string) $res->getBody());
-		    if(count($response_body->routes) == 0) {
+		    if(isset($response_body->error_message)){
+			    return response()->json(['error' => 'INTERNAL_API_CLIENT_ERROR'], 500);
+		    }
+		    elseif(count($response_body->routes) == 0) {
 			    return response()->json(['error' => 'NO_ROUTE'], 404);
 		    }
 
