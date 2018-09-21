@@ -12,6 +12,10 @@ services:
     environment:
     - "DB_PORT=3306"
     - "DB_HOST=database"
+    - "DB_DATABASE=delivery"
+    - "DB_USERNAME=delivery"
+    - "DB_PASSWORD=password"
+
 
   # The Web Server
   web:
